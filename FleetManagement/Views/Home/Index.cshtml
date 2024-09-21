@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "_Layout"; // Отключаем общий макет
+    ViewData["Title"] = "OpenStreetMap";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <style>
+        @section Styles 
+        {
+            <link rel="stylesheet" href="~/css/map.css" />
+            <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div class="rounded-border" id="rBorder">
+        <h3>Информация о устройствах</h3>
+        <ul>
+           
+        </ul>
+    </div>
+    @section Scripts 
+    {
+        <script src="http://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/6.0.0/signalr.min.js"></script>
+        
+
+        <script>
+
+            var deviceData = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model)); // Передаем данные из модели в глобальную переменную
+
+        </script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+        <script src="~/js/map.js"></script> 
+        <script src="~/js/Signalr.js"></script>
+    }
+</body>
+</html>
