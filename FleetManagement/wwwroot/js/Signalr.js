@@ -24,7 +24,6 @@ function InvokeGpsData() {
 // Уведомление о получении данных с GPS и вызываем методы
 connection.on("ReceivedGPSdata", function (GPSdata) {
     BindGPSdataToBorder(GPSdata);
-    console.log(GPSdata);
 });
 
 // Привязка данных к бордеру

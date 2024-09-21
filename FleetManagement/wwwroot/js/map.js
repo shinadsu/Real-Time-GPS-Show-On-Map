@@ -19,13 +19,27 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 deviceData.forEach(function (item) {
     var lat = parseFloat(item.Latitude);
     var lng = parseFloat(item.Longitude);
+    var direction = item.Direction; // Угол направления в градусах
 
     if (!isNaN(lat) && !isNaN(lng)) {
-        var marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+        var marker = L.marker([lat, lng], {
+            icon: customIcon
+        }).addTo(map);
+
         marker.bindPopup("<b>Device ID:</b> " + item.DeviceId + "<br><b>Latitude:</b> " + lat + "<br><b>Longitude:</b> " + lng);
-    }
-    else {
+
+        // Применяем вращение
+        marker.getElement().style.transform = 'rotate(' + direction + 'deg)';
+
+        // Добавляем класс для пульсации
+        var markerElement = marker.getElement();
+        if (markerElement) {
+            markerElement.classList.add('pulsating');
+        }
+    } else {
         console.error('Invalid coordinates for Device ID: ' + item.DeviceId);
     }
 });
+
+
 
