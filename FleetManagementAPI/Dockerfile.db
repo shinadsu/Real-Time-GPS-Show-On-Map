@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/mssql/server:2022-latest
+
+USER root
+
+# Установите необходимые пакеты
+RUN apt-get update && \
+    apt-get install -y gnupg curl apt-transport-https && \
+    curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    echo "deb https://packages.microsoft.com/ubuntu/22.04/prod jammy main" > /etc/apt/sources.list.d/mssql-release.list && \
+    apt-get update && \
+    ACCEPT_EULA=Y apt-get install -y msodbcsql17 mssql-tools && \
+    rm -rf /var/lib/apt/lists/*
+
+USER mssql
+
+ENV ACCEPT_EULA=Y
+ENV SA_PASSWORD=Mitsuru12345!
+
+# Копируем скрипт восстановления
+COPY restore.sql /docker-entrypoint-initdb.d/restore.sql
+
+# Запускаем SQL Server и выполняем скрипт восстановления
+CMD /opt/mssql/bin/sqlservr & sleep 30; /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $SA_PASSWORD -i /docker-entrypoint-initdb.d/restore.sql; tail -f /dev/null

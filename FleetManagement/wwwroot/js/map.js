@@ -16,6 +16,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     }).addTo(map);
 
 // Получаем данные об устройствах через глобальную переменную deviceData, которую передадим из представления
+// Подключение маркеров с направлением и пульсацией
 deviceData.forEach(function (item) {
     var lat = parseFloat(item.Latitude);
     var lng = parseFloat(item.Longitude);
@@ -26,20 +27,22 @@ deviceData.forEach(function (item) {
             icon: customIcon
         }).addTo(map);
 
-        marker.bindPopup("<b>Device ID:</b> " + item.DeviceId + "<br><b>Latitude:</b> " + lat + "<br><b>Longitude:</b> " + lng);
-
-        // Применяем вращение
-        marker.getElement().style.transform = 'rotate(' + direction + 'deg)';
+        // Применяем поворот с помощью плагина Leaflet.RotatedMarker
+        marker.setRotationAngle(direction);
 
         // Добавляем класс для пульсации
         var markerElement = marker.getElement();
         if (markerElement) {
             markerElement.classList.add('pulsating');
         }
+
+        // Привязываем всплывающее окно
+        marker.bindPopup("<b>Device ID:</b> " + item.DeviceId + "<br><b>Latitude:</b> " + lat + "<br><b>Longitude:</b> " + lng);
     } else {
         console.error('Invalid coordinates for Device ID: ' + item.DeviceId);
     }
 });
+
 
 
 
